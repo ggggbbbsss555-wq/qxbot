@@ -2049,6 +2049,20 @@ function escapeHtml(s){
 
 /* ===== Logo Intro Sequence ===== */
 (function(){
+  // Skip intro and platform selection when embedded in an iframe (shell page)
+  var params = new URLSearchParams(window.location.search);
+  var isEmbedded = params.get('embed') === '1' || (window.self !== window.top);
+  if(isEmbedded){
+    // Hide logo screen and platform screen immediately, show app
+    var ls = document.getElementById('logoScreen');
+    if(ls) ls.classList.add('hidden');
+    var ps = document.getElementById('platformScreen');
+    if(ps) ps.classList.remove('visible');
+    document.getElementById('mainApp').classList.add('visible');
+    initSessionTime();
+    updateCreditsDisplay();
+    return;
+  }
   const logoScreen = document.getElementById('logoScreen');
   const logoContainer = document.getElementById('logoContainer');
   setTimeout(function(){
