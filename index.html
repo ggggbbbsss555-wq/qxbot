@@ -390,12 +390,40 @@ html,body{
   vertical-align:middle;
 }
 @media (max-width:480px){
-  .time-stepper{padding:12px 8px;gap:6px}
-  .time-btn{width:24px;height:24px;font-size:13px}
-  .time-value{font-size:20px;min-width:40px}
-  .time-separator{font-size:20px}
-  .time-tz{font-size:9px}
-  .time-tz-name{max-width:70px}
+  .time-stepper{
+    padding:14px 10px;
+    gap:8px;
+    flex-wrap:wrap;
+    justify-content:center;
+  }
+  .time-btn{
+    width:38px;
+    height:32px;
+    font-size:16px;
+    /* larger touch target */
+  }
+  .time-value{
+    font-size:20px;
+    min-width:44px;
+    padding:6px 4px;
+  }
+  .time-separator{font-size:22px}
+  .time-tz{
+    flex-basis:100%;
+    justify-content:center;
+    margin:6px 0 0;
+    padding-top:8px;
+    border-top:1px solid rgba(0,210,255,0.1);
+    font-size:10px;
+  }
+  .time-tz-name{max-width:140px}
+}
+@media (max-width:360px){
+  .time-stepper{padding:12px 6px;gap:6px}
+  .time-btn{width:34px;height:30px;font-size:15px}
+  .time-value{font-size:18px;min-width:38px;padding:5px 3px}
+  .time-separator{font-size:18px}
+  .time-tz-name{max-width:110px}
 }
 .field-hint{
   font-size:10px;color:#666;
@@ -609,20 +637,20 @@ html,body{
 .credits-info-row .val.positive{color:#00ff88}
 .credits-info-row .val.negative{color:#ff4466}
 
-/* ===== Credits Cost Per Bot ===== */
+/* ===== Credits Cost Per Bot (compact) ===== */
 .credits-cost-grid{
   display:grid;
   grid-template-columns:repeat(3,1fr);
-  gap:6px;
-  margin-top:14px;
-  padding-top:14px;
+  gap:5px;
+  margin-top:12px;
+  padding-top:12px;
   border-top:1px solid rgba(171,130,255,0.15);
 }
 .cost-chip{
-  padding:10px 6px;
+  padding:7px 4px;
   background:rgba(10,10,10,0.6);
   border:1px solid #1f1f1f;
-  border-radius:9px;
+  border-radius:7px;
   text-align:center;
   transition:all 0.22s ease;
   cursor:default;
@@ -640,66 +668,68 @@ html,body{
   border-color:#ab82ff;
 }
 .cost-chip-name{
-  font-size:10px;
+  font-size:9px;
   font-weight:700;
   color:#888;
-  letter-spacing:0.5px;
+  letter-spacing:0.4px;
   text-transform:uppercase;
-  margin-bottom:4px;
+  margin-bottom:3px;
 }
 .cost-chip.active[data-bot="strong"] .cost-chip-name{color:#00ff88}
 .cost-chip.active[data-bot="medium"] .cost-chip-name{color:#00d2ff}
 .cost-chip.active[data-bot="pro"] .cost-chip-name{color:#ab82ff}
 .cost-chip-value{
-  font-size:14px;
+  font-size:12px;
   font-weight:800;
   color:#fff;
   font-variant-numeric:tabular-nums;
   line-height:1;
 }
 .cost-chip-value small{
-  font-size:9px;
+  font-size:8px;
   color:#888;
   font-weight:600;
-  letter-spacing:0.3px;
+  letter-spacing:0.2px;
+  display:block;
+  margin-top:2px;
 }
 .credits-notice{
-  margin-top:10px;
-  padding:9px 12px;
+  margin-top:8px;
+  padding:7px 9px;
   background:rgba(0,210,255,0.05);
   border:1px solid rgba(0,210,255,0.18);
-  border-radius:8px;
+  border-radius:7px;
   display:flex;
   align-items:center;
-  gap:8px;
-  font-size:10px;
+  gap:6px;
+  font-size:9px;
   color:rgba(255,255,255,0.7);
   font-weight:600;
-  letter-spacing:0.3px;
+  letter-spacing:0.2px;
   line-height:1.4;
 }
-.credits-notice svg{width:12px;height:12px;stroke:#00d2ff;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+.credits-notice svg{width:10px;height:10px;stroke:#00d2ff;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
 .credits-notice strong{color:#00d2ff;font-weight:700}
 .credits-daily-limit{
-  margin-top:8px;
+  margin-top:6px;
   display:flex;
   align-items:center;
   justify-content:space-between;
-  padding:8px 12px;
+  padding:7px 9px;
   background:rgba(255,170,0,0.05);
   border:1px solid rgba(255,170,0,0.2);
-  border-radius:8px;
-  font-size:10px;
+  border-radius:7px;
+  font-size:9px;
   font-weight:700;
-  letter-spacing:0.4px;
+  letter-spacing:0.3px;
   text-transform:uppercase;
 }
 .credits-daily-limit .lbl{
-  display:flex;align-items:center;gap:6px;
+  display:flex;align-items:center;gap:5px;
   color:rgba(255,255,255,0.6);
 }
-.credits-daily-limit .lbl svg{width:12px;height:12px;stroke:#ffaa00;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-.credits-daily-limit .val{color:#ffaa00;font-size:13px;font-variant-numeric:tabular-nums}
+.credits-daily-limit .lbl svg{width:10px;height:10px;stroke:#ffaa00;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.credits-daily-limit .val{color:#ffaa00;font-size:11px;font-variant-numeric:tabular-nums}
 
 /* ===== Profile Page ===== */
 .profile-card{
@@ -1496,7 +1526,7 @@ html,body{
             <div class="credits-circle">
               <svg viewBox="0 0 100 100">
                 <circle class="credits-circle-bg" cx="50" cy="50" r="42"/>
-                <circle class="credits-circle-fg" id="creditsCircle" cx="50" cy="50" r="42" stroke-dasharray="263.9" stroke-dashoffset="0"/>
+                <circle class="credits-circle-fg" id="creditsCircle" cx="50" cy="50" r="42" stroke-dasharray="263.9" stroke-dashoffset="0" style="stroke-dashoffset:0"/>
               </svg>
               <div class="credits-circle-center">
                 <div class="credits-circle-value" id="creditsValue">900</div>
@@ -2185,13 +2215,16 @@ function updateCreditsDisplay(){
   const valEl = document.getElementById('creditsValue');
   if(valEl) valEl.textContent = credits;
 
-  // Update circle progress (filled = credits used / total)
+  // Update circle progress (filled = remaining credits / total)
+  // When credits = 900 (full), ring is fully colored
+  // When credits = 0 (empty), ring is fully empty
   const circleEl = document.getElementById('creditsCircle');
   if(circleEl){
     const circumference = 263.9;
-    const used = TOTAL_CREDITS - credits;
-    const progress = Math.max(0, Math.min(1, used / TOTAL_CREDITS));
-    const offset = circumference * (1 - progress);
+    const ratio = Math.max(0, Math.min(1, credits / TOTAL_CREDITS));
+    // offset = circumference means EMPTY; offset = 0 means FULL
+    // So when ratio = 1 (full credits), offset = 0 (full ring shown)
+    const offset = circumference * (1 - ratio);
     circleEl.style.strokeDashoffset = offset;
   }
 
