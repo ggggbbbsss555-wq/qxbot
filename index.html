@@ -293,34 +293,34 @@ html,body{
 }
 .field-input[type="time"]{color-scheme:dark}
 
-/* ===== Time Stepper (custom local-time picker with +/- buttons) ===== */
+/* ===== Time Stepper (custom local-time picker with small +/- buttons) ===== */
 .time-stepper{
   display:flex;
   align-items:center;
   justify-content:center;
-  gap:10px;
+  gap:8px;
   padding:14px 12px;
   background:rgba(10,10,10,0.6);
   border:1px solid #1f1f1f;
   border-radius:9px;
   transition:border-color 0.2s ease,background 0.2s ease;
+  flex-wrap:nowrap;
 }
 .time-stepper:hover{border-color:#2a2a2a}
 .time-unit{
   display:flex;
-  flex-direction:column;
   align-items:center;
   gap:4px;
   flex:0 0 auto;
 }
 .time-btn{
-  width:44px;
+  width:26px;
   height:26px;
   background:rgba(0,210,255,0.08);
   border:1px solid rgba(0,210,255,0.25);
   border-radius:6px;
   color:#00d2ff;
-  font-size:18px;
+  font-size:14px;
   font-weight:800;
   cursor:pointer;
   display:flex;
@@ -331,6 +331,7 @@ html,body{
   line-height:1;
   user-select:none;
   -webkit-tap-highlight-color:transparent;
+  padding:0;
 }
 .time-btn:hover{
   background:rgba(0,210,255,0.2);
@@ -338,33 +339,32 @@ html,body{
   color:#fff;
 }
 .time-btn:active{
-  transform:scale(0.92);
+  transform:scale(0.9);
   background:linear-gradient(180deg,#00d2ff 0%,#0099cc 100%);
   color:#000;
   border-color:#00d2ff;
 }
 .time-value{
-  font-size:28px;
+  font-size:24px;
   font-weight:800;
   color:#fff;
   font-variant-numeric:tabular-nums;
-  min-width:54px;
+  min-width:46px;
   text-align:center;
-  padding:4px 0;
+  padding:4px 4px;
   letter-spacing:1px;
   background:rgba(0,30,40,0.4);
   border:1px solid rgba(0,210,255,0.15);
-  border-radius:8px;
+  border-radius:7px;
   line-height:1;
 }
 .time-separator{
-  font-size:28px;
+  font-size:24px;
   font-weight:800;
   color:#00d2ff;
   align-self:center;
   padding:0 2px;
-  /* push down so it aligns with the value, not the buttons */
-  margin-top:14px;
+  line-height:1;
 }
 .time-tz{
   font-size:10px;
@@ -373,8 +373,7 @@ html,body{
   letter-spacing:0.8px;
   text-transform:uppercase;
   margin-left:6px;
-  align-self:flex-end;
-  padding-bottom:8px;
+  align-self:center;
   display:flex;
   align-items:center;
   gap:5px;
@@ -391,10 +390,10 @@ html,body{
 }
 @media (max-width:480px){
   .time-stepper{padding:12px 8px;gap:6px}
-  .time-btn{width:38px;height:24px;font-size:16px}
-  .time-value{font-size:22px;min-width:46px}
-  .time-separator{font-size:22px;margin-top:12px}
-  .time-tz{font-size:9px;padding-bottom:6px}
+  .time-btn{width:24px;height:24px;font-size:13px}
+  .time-value{font-size:20px;min-width:40px}
+  .time-separator{font-size:20px}
+  .time-tz{font-size:9px}
   .time-tz-name{max-width:70px}
 }
 .field-hint{
@@ -1219,14 +1218,14 @@ html,body{
             </div>
             <div class="time-stepper">
               <div class="time-unit">
-                <button class="time-btn" type="button" onclick="adjustSessionTime('hour',1)" aria-label="Increment hour">+</button>
                 <div class="time-value" id="sessionHour">00</div>
+                <button class="time-btn" type="button" onclick="adjustSessionTime('hour',1)" aria-label="Increment hour">+</button>
                 <button class="time-btn" type="button" onclick="adjustSessionTime('hour',-1)" aria-label="Decrement hour">−</button>
               </div>
               <div class="time-separator">:</div>
               <div class="time-unit">
-                <button class="time-btn" type="button" onclick="adjustSessionTime('minute',1)" aria-label="Increment minute">+</button>
                 <div class="time-value" id="sessionMinute">00</div>
+                <button class="time-btn" type="button" onclick="adjustSessionTime('minute',1)" aria-label="Increment minute">+</button>
                 <button class="time-btn" type="button" onclick="adjustSessionTime('minute',-1)" aria-label="Decrement minute">−</button>
               </div>
               <div class="time-tz" id="sessionTz">
