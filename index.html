@@ -292,6 +292,111 @@ html,body{
   filter:invert(1) brightness(0.7);cursor:pointer;
 }
 .field-input[type="time"]{color-scheme:dark}
+
+/* ===== Time Stepper (custom local-time picker with +/- buttons) ===== */
+.time-stepper{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  padding:14px 12px;
+  background:rgba(10,10,10,0.6);
+  border:1px solid #1f1f1f;
+  border-radius:9px;
+  transition:border-color 0.2s ease,background 0.2s ease;
+}
+.time-stepper:hover{border-color:#2a2a2a}
+.time-unit{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:4px;
+  flex:0 0 auto;
+}
+.time-btn{
+  width:44px;
+  height:26px;
+  background:rgba(0,210,255,0.08);
+  border:1px solid rgba(0,210,255,0.25);
+  border-radius:6px;
+  color:#00d2ff;
+  font-size:18px;
+  font-weight:800;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  transition:all 0.18s ease;
+  font-family:inherit;
+  line-height:1;
+  user-select:none;
+  -webkit-tap-highlight-color:transparent;
+}
+.time-btn:hover{
+  background:rgba(0,210,255,0.2);
+  border-color:#00d2ff;
+  color:#fff;
+}
+.time-btn:active{
+  transform:scale(0.92);
+  background:linear-gradient(180deg,#00d2ff 0%,#0099cc 100%);
+  color:#000;
+  border-color:#00d2ff;
+}
+.time-value{
+  font-size:28px;
+  font-weight:800;
+  color:#fff;
+  font-variant-numeric:tabular-nums;
+  min-width:54px;
+  text-align:center;
+  padding:4px 0;
+  letter-spacing:1px;
+  background:rgba(0,30,40,0.4);
+  border:1px solid rgba(0,210,255,0.15);
+  border-radius:8px;
+  line-height:1;
+}
+.time-separator{
+  font-size:28px;
+  font-weight:800;
+  color:#00d2ff;
+  align-self:center;
+  padding:0 2px;
+  /* push down so it aligns with the value, not the buttons */
+  margin-top:14px;
+}
+.time-tz{
+  font-size:10px;
+  color:#888;
+  font-weight:700;
+  letter-spacing:0.8px;
+  text-transform:uppercase;
+  margin-left:6px;
+  align-self:flex-end;
+  padding-bottom:8px;
+  display:flex;
+  align-items:center;
+  gap:5px;
+  white-space:nowrap;
+}
+.time-tz svg{width:11px;height:11px;stroke:#00d2ff;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.time-tz-name{
+  max-width:90px;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  display:inline-block;
+  vertical-align:middle;
+}
+@media (max-width:480px){
+  .time-stepper{padding:12px 8px;gap:6px}
+  .time-btn{width:38px;height:24px;font-size:16px}
+  .time-value{font-size:22px;min-width:46px}
+  .time-separator{font-size:22px;margin-top:12px}
+  .time-tz{font-size:9px;padding-bottom:6px}
+  .time-tz-name{max-width:70px}
+}
 .field-hint{
   font-size:10px;color:#666;
   margin-top:6px;letter-spacing:0.3px;
@@ -1106,16 +1211,32 @@ html,body{
             </div>
           </div>
 
-          <!-- Session Time Field -->
+          <!-- Session Time Field (Custom Local-Time Stepper) -->
           <div class="field">
             <div class="field-label">
               <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
               <span>Session Time</span>
             </div>
-            <input type="time" class="field-input" id="sessionTimeInput" value="09:00"/>
+            <div class="time-stepper">
+              <div class="time-unit">
+                <button class="time-btn" type="button" onclick="adjustSessionTime('hour',1)" aria-label="Increment hour">+</button>
+                <div class="time-value" id="sessionHour">00</div>
+                <button class="time-btn" type="button" onclick="adjustSessionTime('hour',-1)" aria-label="Decrement hour">−</button>
+              </div>
+              <div class="time-separator">:</div>
+              <div class="time-unit">
+                <button class="time-btn" type="button" onclick="adjustSessionTime('minute',1)" aria-label="Increment minute">+</button>
+                <div class="time-value" id="sessionMinute">00</div>
+                <button class="time-btn" type="button" onclick="adjustSessionTime('minute',-1)" aria-label="Decrement minute">−</button>
+              </div>
+              <div class="time-tz" id="sessionTz">
+                <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                <span class="time-tz-name" id="sessionTzName">Local</span>
+              </div>
+            </div>
             <div class="field-hint">
               <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
-              <span>The session starts at this time daily</span>
+              <span>Auto-detected from your device — session starts daily at this local time</span>
             </div>
           </div>
 
@@ -1392,7 +1513,59 @@ function selectPlatform(name){
   setTimeout(function(){
     platformScreen.classList.remove('visible');
     document.getElementById('mainApp').classList.add('visible');
+    // Initialize session time with user's local time when the app becomes visible
+    initSessionTime();
   }, 500);
+}
+
+/* ===== Session Time — local-time stepper with +/- buttons ===== */
+function initSessionTime(){
+  // Use current local time as default
+  const now = new Date();
+  const h = String(now.getHours()).padStart(2,'0');
+  const m = String(now.getMinutes()).padStart(2,'0');
+  State.sessionTime = h + ':' + m;
+  updateSessionTimeDisplay();
+
+  // Detect timezone
+  let tzLabel = 'Local';
+  try{
+    const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    if(tz){
+      // e.g. "Africa/Algiers" -> show as-is or short version
+      tzLabel = tz;
+    }
+  }catch(e){
+    // Fallback: UTC offset
+    const offset = -now.getTimezoneOffset();
+    const sign = offset >= 0 ? '+' : '-';
+    const oh = String(Math.floor(Math.abs(offset)/60)).padStart(2,'0');
+    const om = String(Math.abs(offset) % 60).padStart(2,'0');
+    tzLabel = 'UTC' + sign + oh + ':' + om;
+  }
+  const tzEl = document.getElementById('sessionTzName');
+  if(tzEl) tzEl.textContent = tzLabel;
+}
+
+function updateSessionTimeDisplay(){
+  const parts = State.sessionTime.split(':');
+  const hEl = document.getElementById('sessionHour');
+  const mEl = document.getElementById('sessionMinute');
+  if(hEl) hEl.textContent = parts[0];
+  if(mEl) mEl.textContent = parts[1];
+}
+
+function adjustSessionTime(unit, delta){
+  let parts = State.sessionTime.split(':').map(function(s){return parseInt(s,10);});
+  let h = parts[0];
+  let m = parts[1];
+  if(unit === 'hour'){
+    h = (h + delta + 24) % 24;
+  } else if(unit === 'minute'){
+    m = (m + delta + 60) % 60;
+  }
+  State.sessionTime = String(h).padStart(2,'0') + ':' + String(m).padStart(2,'0');
+  updateSessionTimeDisplay();
 }
 
 /* ===== Navigation ===== */
