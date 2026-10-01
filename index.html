@@ -609,6 +609,98 @@ html,body{
 .credits-info-row .val.positive{color:#00ff88}
 .credits-info-row .val.negative{color:#ff4466}
 
+/* ===== Credits Cost Per Bot ===== */
+.credits-cost-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:6px;
+  margin-top:14px;
+  padding-top:14px;
+  border-top:1px solid rgba(171,130,255,0.15);
+}
+.cost-chip{
+  padding:10px 6px;
+  background:rgba(10,10,10,0.6);
+  border:1px solid #1f1f1f;
+  border-radius:9px;
+  text-align:center;
+  transition:all 0.22s ease;
+  cursor:default;
+}
+.cost-chip.active{
+  background:linear-gradient(180deg,rgba(0,210,255,0.12) 0%,rgba(0,210,255,0.03) 100%);
+  border-color:#00d2ff;
+}
+.cost-chip[data-bot="strong"].active{
+  background:linear-gradient(180deg,rgba(0,255,136,0.12) 0%,rgba(0,255,136,0.03) 100%);
+  border-color:#00ff88;
+}
+.cost-chip[data-bot="pro"].active{
+  background:linear-gradient(180deg,rgba(171,130,255,0.12) 0%,rgba(171,130,255,0.03) 100%);
+  border-color:#ab82ff;
+}
+.cost-chip-name{
+  font-size:10px;
+  font-weight:700;
+  color:#888;
+  letter-spacing:0.5px;
+  text-transform:uppercase;
+  margin-bottom:4px;
+}
+.cost-chip.active[data-bot="strong"] .cost-chip-name{color:#00ff88}
+.cost-chip.active[data-bot="medium"] .cost-chip-name{color:#00d2ff}
+.cost-chip.active[data-bot="pro"] .cost-chip-name{color:#ab82ff}
+.cost-chip-value{
+  font-size:14px;
+  font-weight:800;
+  color:#fff;
+  font-variant-numeric:tabular-nums;
+  line-height:1;
+}
+.cost-chip-value small{
+  font-size:9px;
+  color:#888;
+  font-weight:600;
+  letter-spacing:0.3px;
+}
+.credits-notice{
+  margin-top:10px;
+  padding:9px 12px;
+  background:rgba(0,210,255,0.05);
+  border:1px solid rgba(0,210,255,0.18);
+  border-radius:8px;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  font-size:10px;
+  color:rgba(255,255,255,0.7);
+  font-weight:600;
+  letter-spacing:0.3px;
+  line-height:1.4;
+}
+.credits-notice svg{width:12px;height:12px;stroke:#00d2ff;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+.credits-notice strong{color:#00d2ff;font-weight:700}
+.credits-daily-limit{
+  margin-top:8px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:8px 12px;
+  background:rgba(255,170,0,0.05);
+  border:1px solid rgba(255,170,0,0.2);
+  border-radius:8px;
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:0.4px;
+  text-transform:uppercase;
+}
+.credits-daily-limit .lbl{
+  display:flex;align-items:center;gap:6px;
+  color:rgba(255,255,255,0.6);
+}
+.credits-daily-limit .lbl svg{width:12px;height:12px;stroke:#ffaa00;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.credits-daily-limit .val{color:#ffaa00;font-size:13px;font-variant-numeric:tabular-nums}
+
 /* ===== Profile Page ===== */
 .profile-card{
   background:linear-gradient(180deg,#131313 0%,#080808 100%);
@@ -1407,24 +1499,55 @@ html,body{
                 <circle class="credits-circle-fg" id="creditsCircle" cx="50" cy="50" r="42" stroke-dasharray="263.9" stroke-dashoffset="0"/>
               </svg>
               <div class="credits-circle-center">
-                <div class="credits-circle-value" id="creditsValue">847</div>
+                <div class="credits-circle-value" id="creditsValue">900</div>
                 <div class="credits-circle-label">Points</div>
               </div>
             </div>
             <div class="credits-info">
               <div class="credits-info-row">
                 <span class="lbl">Cost per signal</span>
-                <span class="val">5 pts</span>
+                <span class="val" id="costPerSignal">1 pt</span>
               </div>
               <div class="credits-info-row">
                 <span class="lbl">Signals remaining</span>
-                <span class="val positive" id="remainingSignals">169</span>
+                <span class="val positive" id="remainingSignals">900</span>
               </div>
               <div class="credits-info-row">
                 <span class="lbl">Auto-renewal</span>
-                <span class="val">In 12 days</span>
+                <span class="val">In 30 days</span>
               </div>
             </div>
+          </div>
+
+          <!-- Cost Per Bot Grid -->
+          <div class="credits-cost-grid">
+            <div class="cost-chip active" data-bot="strong" id="costChipStrong">
+              <div class="cost-chip-name">Strong</div>
+              <div class="cost-chip-value">1<small> pt/signal</small></div>
+            </div>
+            <div class="cost-chip" data-bot="medium" id="costChipMedium">
+              <div class="cost-chip-name">Medium</div>
+              <div class="cost-chip-value">3<small> pt/signal</small></div>
+            </div>
+            <div class="cost-chip" data-bot="pro" id="costChipPro">
+              <div class="cost-chip-name">Pro</div>
+              <div class="cost-chip-value">6<small> pt/signal</small></div>
+            </div>
+          </div>
+
+          <!-- Notice: 1 signal = 1 point = 900 monthly -->
+          <div class="credits-notice">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+            <span><strong>1 signal = 1 point</strong> — up to <strong>900 signals monthly</strong> (with Strong bot)</span>
+          </div>
+
+          <!-- Daily Limit -->
+          <div class="credits-daily-limit">
+            <span class="lbl">
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              Max Daily Signals
+            </span>
+            <span class="val">50 / day</span>
           </div>
         </div>
 
@@ -1851,11 +1974,21 @@ const State = {
   sessionTime: '09:00',
   signalsCount: 10,
   signalsSent: 0,
-  credits: 847,
-  costPerSignal: 5,
+  credits: 900,
+  costPerSignal: 1,
+  dailyLimit: 50,
   chatId: '',
   trades: []
 };
+
+/* ===== Cost per signal for each bot type ===== */
+const BOT_COST = {
+  strong: 1,
+  medium: 3,
+  pro: 6
+};
+
+const TOTAL_CREDITS = 900; // initial monthly grant
 
 /* ===== Sample Trades ===== */
 const SAMPLE_TRADES = [
@@ -1911,6 +2044,8 @@ function selectPlatform(name){
     document.getElementById('mainApp').classList.add('visible');
     // Initialize session time with user's local time when the app becomes visible
     initSessionTime();
+    // Initialize credits display based on default bot (Strong = 1 pt/signal)
+    updateCreditsDisplay();
   }, 500);
 }
 
@@ -2017,9 +2152,56 @@ function openStrategyDetail(strategy){
 
 function activateStrategy(strategy){
   State.strategy = strategy;
+  State.costPerSignal = BOT_COST[strategy] || 1;
+  updateCreditsDisplay();
   const data = STRATEGIES[strategy];
-  showToast(data.name + ' strategy activated', 'success');
+  showToast(data.name + ' strategy activated · ' + State.costPerSignal + ' pts/signal', 'success');
   setTimeout(() => navigateTo('home'), 800);
+}
+
+/* ===== Update Credits Display (dynamic based on selected bot) ===== */
+function updateCreditsDisplay(){
+  const cost = State.costPerSignal;
+  const credits = State.credits;
+  const remaining = cost > 0 ? Math.floor(credits / cost) : 0;
+  const monthlyCap = Math.min(remaining, State.dailyLimit * 30);
+
+  // Cost per signal text
+  const costEl = document.getElementById('costPerSignal');
+  if(costEl) costEl.textContent = cost + ' pt' + (cost > 1 ? 's' : '');
+
+  // Signals remaining
+  const remEl = document.getElementById('remainingSignals');
+  if(remEl){
+    remEl.textContent = monthlyCap.toLocaleString('en-US');
+    // Color: green if plenty, yellow if low, red if very low
+    remEl.classList.remove('positive','negative');
+    if(monthlyCap >= 100) remEl.classList.add('positive');
+    else if(monthlyCap >= 20) remEl.style.color = '#ffaa00';
+    else remEl.style.color = '#ff4466';
+  }
+
+  // Update credits circle value (points left)
+  const valEl = document.getElementById('creditsValue');
+  if(valEl) valEl.textContent = credits;
+
+  // Update circle progress (filled = credits used / total)
+  const circleEl = document.getElementById('creditsCircle');
+  if(circleEl){
+    const circumference = 263.9;
+    const used = TOTAL_CREDITS - credits;
+    const progress = Math.max(0, Math.min(1, used / TOTAL_CREDITS));
+    const offset = circumference * (1 - progress);
+    circleEl.style.strokeDashoffset = offset;
+  }
+
+  // Highlight the active cost chip
+  ['strong','medium','pro'].forEach(bot=>{
+    const chip = document.getElementById('costChip' + bot.charAt(0).toUpperCase() + bot.slice(1));
+    if(chip){
+      chip.classList.toggle('active', bot === State.strategy);
+    }
+  });
 }
 
 /* ===== Filter Chips ===== */
