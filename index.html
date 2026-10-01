@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>BotPanel — Control Center</title>
+<title>QuantVexa — Control Center</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/fontsource/fonts/inter@latest/latin-400-normal.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/fontsource/fonts/inter@latest/latin-600-normal.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/fontsource/fonts/inter@latest/latin-700-normal.css">
@@ -16,17 +16,155 @@
 *::-webkit-scrollbar-thumb{background:rgba(140,140,140,0.35);border-radius:10px;border:2px solid transparent;background-clip:padding-box}
 *::-webkit-scrollbar-thumb:hover{background:rgba(0,210,255,0.6);background-clip:padding-box}
 *::-webkit-scrollbar-button{display:none}
+
 html,body{
   width:100%;height:100%;
   background:#000;
   font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
   color:#fff;overflow:hidden;
 }
+
+/* ===== Logo Intro Screen ===== */
+.logo-screen{
+  position:fixed;inset:0;z-index:1000;
+  background:#000;
+  display:flex;justify-content:center;align-items:center;
+  opacity:1;
+  transition:opacity 0.6s ease;
+}
+.logo-screen.hidden{opacity:0;pointer-events:none}
+.logo-container{
+  width:460px;height:460px;
+  position:relative;z-index:5;
+  transform-origin:center center;
+  transition:transform 3s cubic-bezier(0.22,1,0.36,1),
+             opacity 1.5s ease,
+             z-index 0.3s ease 2.5s;
+  display:none;
+  transform:translateY(20px);
+}
+.logo-container.shown{display:block}
+.logo-container.expanded{
+  transform:translateY(20px) scale(2.2);
+  opacity:0.25;z-index:0;pointer-events:none;
+}
+.logo-container svg{width:100%;height:100%;overflow:visible;display:block}
+.hexagon-border{
+  fill:none;stroke:url(#cyanGrad);
+  stroke-width:9;stroke-linecap:round;stroke-linejoin:round;
+  stroke-dasharray:320;stroke-dashoffset:320;
+  animation:drawHex 3s ease-out forwards;
+}
+.hexagon{
+  fill:none;stroke:url(#blueGrad);
+  stroke-width:3;stroke-linecap:round;stroke-linejoin:round;
+  stroke-dasharray:320;stroke-dashoffset:320;
+  animation:drawHex 3s ease-out forwards;
+}
+.bar{
+  animation:growBar 2s ease-out forwards;
+  opacity:0;fill:#000;stroke:url(#cyanGrad);
+  stroke-width:2;stroke-linejoin:round;
+  transform-box:fill-box;transform-origin:center bottom;
+}
+.bar-2{stroke-width:3}
+.notch-fill{
+  fill:none;stroke:url(#cyanGrad);
+  stroke-width:9;stroke-linecap:round;stroke-linejoin:round;
+  stroke-dasharray:38;stroke-dashoffset:38;
+  animation:revealHead 2s ease-out forwards;
+}
+.notch-fill-inner{
+  fill:none;stroke:url(#blueGrad);
+  stroke-width:3;stroke-linecap:round;stroke-linejoin:round;
+  stroke-dasharray:38;stroke-dashoffset:38;
+  animation:revealHead 2s ease-out forwards;
+}
+@keyframes drawHex{to{stroke-dashoffset:0}}
+@keyframes growBar{from{transform:scaleY(0);opacity:0}to{transform:scaleY(1);opacity:1}}
+@keyframes revealHead{to{stroke-dashoffset:0}}
+@media (max-width: 600px){
+  .logo-container{width:300px;height:300px}
+  .logo-container.expanded{transform:translateY(20px) scale(1.6)}
+}
+@media (max-width: 380px){
+  .logo-container{width:260px;height:260px}
+  .logo-container.expanded{transform:translateY(20px) scale(1.5)}
+}
+
+/* ===== Platform Selector Screen ===== */
+.platform-screen{
+  position:fixed;inset:0;z-index:900;
+  background:#000;
+  display:none;flex-direction:column;
+  justify-content:center;align-items:center;
+  padding:32px 20px;
+  opacity:0;
+  transition:opacity 0.5s ease;
+}
+.platform-screen.visible{display:flex;opacity:1}
+.platform-screen.hidden{opacity:0;pointer-events:none}
+.platform-screen-title{
+  font-size:11px;font-weight:700;color:#00d2ff;
+  letter-spacing:2.5px;text-transform:uppercase;
+  margin-bottom:8px;
+}
+.platform-screen-heading{
+  font-size:22px;font-weight:800;color:#fff;
+  margin-bottom:36px;text-align:center;
+  letter-spacing:0.3px;
+}
+.platform-buttons{
+  display:flex;flex-direction:column;gap:14px;
+  width:100%;max-width:360px;
+}
+.platform-btn{
+  padding:22px 20px;
+  background:linear-gradient(180deg,#131313 0%,#080808 100%);
+  border:1px solid #1f1f1f;
+  border-radius:14px;
+  cursor:pointer;
+  display:flex;align-items:center;gap:14px;
+  transition:border-color 0.22s ease,background 0.22s ease;
+  font-family:inherit;color:inherit;text-align:left;
+}
+.platform-btn:hover{
+  border-color:#00d2ff;
+  background:linear-gradient(180deg,rgba(0,210,255,0.06) 0%,#080808 100%);
+}
+.platform-btn-icon{
+  width:48px;height:48px;flex-shrink:0;
+  border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(135deg,#00d2ff 0%,#0099cc 100%);
+  border:1px solid #00d2ff;
+}
+.platform-btn-icon svg{width:26px;height:26px;stroke:#000;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.platform-btn-info{flex:1;min-width:0}
+.platform-btn-name{
+  font-size:18px;font-weight:800;color:#fff;
+  letter-spacing:0.5px;margin-bottom:2px;
+}
+.platform-btn-desc{
+  font-size:11px;color:#888;font-weight:500;
+  letter-spacing:0.2px;
+}
+.platform-btn-arrow{
+  color:#555;font-size:18px;font-weight:700;
+  transition:color 0.22s ease,transform 0.22s ease;
+}
+.platform-btn:hover .platform-btn-arrow{
+  color:#00d2ff;transform:translateX(3px);
+}
+
+/* ===== App Container ===== */
 .app{
   width:100%;height:100%;
   display:flex;flex-direction:column;
   position:relative;
+  opacity:0;transition:opacity 0.5s ease;
 }
+.app.visible{opacity:1}
 
 /* ===== Top Bar ===== */
 .top-bar{
@@ -161,7 +299,7 @@ html,body{
 }
 .field-hint svg{width:11px;height:11px;stroke:#666;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 
-/* ===== Telegram Bot Type (Compact Fixed) ===== */
+/* ===== Platform Fixed (Compact) ===== */
 .bot-type-fixed{
   padding:10px 12px;
   background:linear-gradient(180deg,rgba(0,136,204,0.08) 0%,rgba(0,136,204,0.02) 100%);
@@ -196,103 +334,84 @@ html,body{
 }
 .bot-type-fixed-check svg{width:10px;height:10px;stroke:#000;fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
 
-/* ===== Strategy / Bot Level Selector ===== */
-.strategy-grid{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:8px;
+/* ===== Strategy List (Vertical, Clickable) ===== */
+.strategy-list{
+  display:flex;flex-direction:column;gap:8px;
 }
-.strategy-card{
+.strategy-list-item{
   position:relative;
-  padding:14px 10px;
+  padding:14px;
   background:linear-gradient(180deg,#161616 0%,#0a0a0a 100%);
   border:1px solid #222;
   border-radius:10px;
   cursor:pointer;
-  transition:all 0.2s ease;
-  text-align:center;
-  display:flex;flex-direction:column;align-items:center;gap:8px;
+  transition:all 0.22s ease;
+  display:flex;align-items:center;gap:12px;
   overflow:hidden;
 }
-.strategy-card:hover{
+.strategy-list-item:hover{
   background:linear-gradient(180deg,#1f1f1f 0%,#131313 100%);
   border-color:#333;
 }
-.strategy-card.selected{
-  background:linear-gradient(180deg,rgba(0,210,255,0.12) 0%,rgba(0,210,255,0.03) 100%);
-  border-color:#00d2ff;
+.strategy-list-item::before{
+  content:'';position:absolute;left:0;top:0;bottom:0;
+  width:3px;border-radius:0 2px 2px 0;
+  transition:opacity 0.22s ease;
+  opacity:0;
 }
-/* Color accents per strategy */
-.strategy-card[data-strategy="strong"].selected{
-  background:linear-gradient(180deg,rgba(0,255,136,0.12) 0%,rgba(0,255,136,0.02) 100%);
-  border-color:#00ff88;
+.strategy-list-item[data-strategy="strong"]::before{
+  background:linear-gradient(180deg,#00ff88,#00cc6a);
 }
-.strategy-card[data-strategy="strong"] .strategy-icon{
+.strategy-list-item[data-strategy="medium"]::before{
+  background:linear-gradient(180deg,#00d2ff,#0099cc);
+}
+.strategy-list-item[data-strategy="pro"]::before{
+  background:linear-gradient(180deg,#ab82ff,#8a5ce0);
+}
+.strategy-list-item:hover::before{opacity:1}
+
+.strategy-list-icon{
+  width:42px;height:42px;flex-shrink:0;
+  border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+  border:1px solid;
+}
+.strategy-list-item[data-strategy="strong"] .strategy-list-icon{
   background:rgba(0,255,136,0.12);
   border-color:rgba(0,255,136,0.3);
 }
-.strategy-card[data-strategy="strong"] .strategy-icon svg{stroke:#00ff88}
-.strategy-card[data-strategy="strong"].selected .strategy-icon{
-  background:linear-gradient(135deg,#00ff88 0%,#00cc6a 100%);
-  border-color:#00ff88;
-}
-.strategy-card[data-strategy="strong"].selected .strategy-icon svg{stroke:#000}
-.strategy-card[data-strategy="strong"].selected .strategy-name{color:#00ff88}
-
-.strategy-card[data-strategy="medium"] .strategy-icon{
+.strategy-list-item[data-strategy="strong"] .strategy-list-icon svg{stroke:#00ff88}
+.strategy-list-item[data-strategy="medium"] .strategy-list-icon{
   background:rgba(0,210,255,0.12);
   border-color:rgba(0,210,255,0.3);
 }
-.strategy-card[data-strategy="medium"] .strategy-icon svg{stroke:#00d2ff}
-.strategy-card[data-strategy="medium"].selected .strategy-icon{
-  background:linear-gradient(135deg,#00d2ff 0%,#0099cc 100%);
-  border-color:#00d2ff;
-}
-.strategy-card[data-strategy="medium"].selected .strategy-icon svg{stroke:#000}
-.strategy-card[data-strategy="medium"].selected .strategy-name{color:#00d2ff}
-
-.strategy-card[data-strategy="pro"] .strategy-icon{
+.strategy-list-item[data-strategy="medium"] .strategy-list-icon svg{stroke:#00d2ff}
+.strategy-list-item[data-strategy="pro"] .strategy-list-icon{
   background:rgba(171,130,255,0.12);
   border-color:rgba(171,130,255,0.3);
 }
-.strategy-card[data-strategy="pro"] .strategy-icon svg{stroke:#ab82ff}
-.strategy-card[data-strategy="pro"].selected .strategy-icon{
-  background:linear-gradient(135deg,#ab82ff 0%,#8a5ce0 100%);
-  border-color:#ab82ff;
-}
-.strategy-card[data-strategy="pro"].selected .strategy-icon svg{stroke:#000}
-.strategy-card[data-strategy="pro"].selected .strategy-name{color:#ab82ff}
+.strategy-list-item[data-strategy="pro"] .strategy-list-icon svg{stroke:#ab82ff}
+.strategy-list-icon svg{width:22px;height:22px;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 
-.strategy-icon{
-  width:36px;height:36px;
-  border-radius:9px;
-  display:flex;align-items:center;justify-content:center;
-  border:1px solid;
+.strategy-list-info{flex:1;min-width:0}
+.strategy-list-name{
+  font-size:14px;font-weight:700;color:#fff;
+  letter-spacing:0.3px;margin-bottom:2px;
+}
+.strategy-list-desc{
+  font-size:11px;color:#888;font-weight:500;
+  letter-spacing:0.2px;
+}
+.strategy-list-arrow{
+  color:#555;font-size:18px;font-weight:700;
+  transition:color 0.22s ease,transform 0.22s ease;
   flex-shrink:0;
 }
-.strategy-icon svg{width:20px;height:20px;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-.strategy-name{
-  font-size:12px;font-weight:700;color:#fff;
-  letter-spacing:0.3px;
+.strategy-list-item:hover .strategy-list-arrow{
+  color:#00d2ff;transform:translateX(3px);
 }
-.strategy-desc{
-  font-size:9px;color:#888;
-  letter-spacing:0.3px;
-  line-height:1.4;
-  text-align:center;
-  padding:0 2px;
-}
-.strategy-card.selected .strategy-desc{color:rgba(255,255,255,0.6)}
-.strategy-check{
-  position:absolute;top:6px;right:6px;
-  width:16px;height:16px;border-radius:50%;
-  display:none;align-items:center;justify-content:center;
-}
-.strategy-card[data-strategy="strong"] .strategy-check{background:#00ff88}
-.strategy-card[data-strategy="medium"] .strategy-check{background:#00d2ff}
-.strategy-card[data-strategy="pro"] .strategy-check{background:#ab82ff}
-.strategy-card.selected .strategy-check{display:flex}
-.strategy-check svg{width:10px;height:10px;stroke:#000;fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+.strategy-list-item[data-strategy="strong"]:hover .strategy-list-arrow{color:#00ff88}
+.strategy-list-item[data-strategy="pro"]:hover .strategy-list-arrow{color:#ab82ff}
 
 /* ===== Run Button ===== */
 .run-btn{
@@ -554,6 +673,156 @@ html,body{
 }
 .nav-btn .badge.hidden{display:none}
 
+/* ===== Strategy Detail Page ===== */
+.detail-back{
+  background:transparent;
+  border:1px solid #1f1f1f;
+  border-radius:9px;
+  padding:8px 14px;
+  color:#888;
+  font-family:inherit;font-size:11px;font-weight:700;
+  letter-spacing:0.5px;text-transform:uppercase;
+  cursor:pointer;
+  display:inline-flex;align-items:center;gap:6px;
+  margin-bottom:14px;
+  transition:all 0.22s ease;
+}
+.detail-back:hover{border-color:#00d2ff;color:#00d2ff}
+.detail-back svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+.detail-hero{
+  padding:28px 22px 22px;
+  background:linear-gradient(180deg,#131313 0%,#080808 100%);
+  border:1px solid #1f1f1f;
+  border-radius:14px;
+  margin-bottom:14px;
+  text-align:center;
+  position:relative;
+  overflow:hidden;
+}
+.detail-hero::before{
+  content:'';position:absolute;left:0;top:0;bottom:0;
+  width:3px;
+}
+.detail-hero[data-strategy="strong"]::before{
+  background:linear-gradient(180deg,#00ff88,#00cc6a);
+}
+.detail-hero[data-strategy="medium"]::before{
+  background:linear-gradient(180deg,#00d2ff,#0099cc);
+}
+.detail-hero[data-strategy="pro"]::before{
+  background:linear-gradient(180deg,#ab82ff,#8a5ce0);
+}
+.detail-hero-icon{
+  width:64px;height:64px;
+  border-radius:14px;
+  display:flex;align-items:center;justify-content:center;
+  margin:0 auto 14px;
+  border:1px solid;
+}
+.detail-hero[data-strategy="strong"] .detail-hero-icon{
+  background:linear-gradient(135deg,#00ff88 0%,#00cc6a 100%);
+  border-color:#00ff88;
+}
+.detail-hero[data-strategy="medium"] .detail-hero-icon{
+  background:linear-gradient(135deg,#00d2ff 0%,#0099cc 100%);
+  border-color:#00d2ff;
+}
+.detail-hero[data-strategy="pro"] .detail-hero-icon{
+  background:linear-gradient(135deg,#ab82ff 0%,#8a5ce0 100%);
+  border-color:#ab82ff;
+}
+.detail-hero-icon svg{width:32px;height:32px;stroke:#000;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.detail-hero-name{
+  font-size:24px;font-weight:800;color:#fff;
+  letter-spacing:0.5px;margin-bottom:6px;
+}
+.detail-hero-tag{
+  font-size:12px;color:#888;font-weight:600;
+  letter-spacing:0.5px;
+}
+
+.detail-stats{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:8px;
+  margin-bottom:14px;
+}
+.detail-stat{
+  padding:14px 10px;
+  background:linear-gradient(180deg,#131313 0%,#080808 100%);
+  border:1px solid #1f1f1f;
+  border-radius:10px;
+  text-align:center;
+}
+.detail-stat-value{
+  font-size:18px;font-weight:800;color:#fff;
+  line-height:1;font-variant-numeric:tabular-nums;
+  margin-bottom:4px;
+}
+.detail-page[data-strategy="strong"] .detail-stat-value{color:#00ff88}
+.detail-page[data-strategy="medium"] .detail-stat-value{color:#00d2ff}
+.detail-page[data-strategy="pro"] .detail-stat-value{color:#ab82ff}
+.detail-stat-label{
+  font-size:9px;color:#888;font-weight:600;
+  letter-spacing:0.6px;text-transform:uppercase;
+}
+
+.detail-features{
+  background:linear-gradient(180deg,#131313 0%,#080808 100%);
+  border:1px solid #1f1f1f;
+  border-radius:14px;
+  padding:18px;
+  margin-bottom:14px;
+}
+.detail-features-title{
+  font-size:12px;font-weight:700;color:#888;
+  letter-spacing:1.2px;text-transform:uppercase;
+  margin-bottom:14px;
+  display:flex;align-items:center;gap:10px;
+}
+.detail-features-title::before{
+  content:'';width:3px;height:14px;
+  background:linear-gradient(180deg,#00d2ff,#0099cc);
+  border-radius:2px;
+}
+.detail-feature{
+  display:flex;align-items:flex-start;gap:10px;
+  padding:10px 0;
+  border-bottom:1px solid #1a1a1a;
+}
+.detail-feature:last-child{border-bottom:none}
+.detail-feature-check{
+  width:18px;height:18px;flex-shrink:0;
+  border-radius:50%;
+  background:rgba(0,255,136,0.12);
+  border:1px solid rgba(0,255,136,0.3);
+  display:flex;align-items:center;justify-content:center;
+  margin-top:2px;
+}
+.detail-feature-check svg{width:10px;height:10px;stroke:#00ff88;fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+.detail-feature-text{
+  font-size:12px;color:#fff;font-weight:500;
+  line-height:1.5;flex:1;
+}
+.detail-feature-text strong{
+  color:#00d2ff;font-weight:700;
+}
+
+.detail-activate{
+  width:100%;
+  padding:14px 20px;
+  background:linear-gradient(180deg,#00d2ff 0%,#0099cc 100%);
+  border:1px solid #00d2ff;
+  border-radius:10px;
+  color:#000;
+  font-family:inherit;font-size:14px;font-weight:800;
+  letter-spacing:0.5px;
+  cursor:pointer;
+  transition:all 0.22s ease;
+  display:flex;align-items:center;justify-content:center;gap:10px;
+}
+.detail-activate:hover{background:linear-gradient(180deg,#00deff 0%,#00a8e0 100%)}
+.detail-activate svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+
 /* ===== Toast ===== */
 .toast{
   position:fixed;top:70px;left:50%;
@@ -566,7 +835,7 @@ html,body{
   letter-spacing:0.3px;
   opacity:0;pointer-events:none;
   transition:all 0.3s ease;
-  z-index:100;
+  z-index:1100;
   display:flex;align-items:center;gap:8px;
 }
 .toast.visible{opacity:1;transform:translateX(-50%) translateY(0)}
@@ -575,12 +844,11 @@ html,body{
 
 /* ===== Responsive ===== */
 @media (max-width:480px){
-  .strategy-grid{grid-template-columns:repeat(3,1fr);gap:6px}
-  .strategy-card{padding:12px 6px;gap:6px}
-  .strategy-icon{width:32px;height:32px}
-  .strategy-icon svg{width:18px;height:18px}
-  .strategy-name{font-size:11px}
-  .strategy-desc{font-size:8px}
+  .strategy-list-item{padding:12px}
+  .strategy-list-icon{width:38px;height:38px}
+  .strategy-list-icon svg{width:20px;height:20px}
+  .strategy-list-name{font-size:13px}
+  .strategy-list-desc{font-size:10px}
   .stats-grid{grid-template-columns:repeat(3,1fr);gap:6px}
   .stat-card{padding:12px 8px}
   .stat-card-value{font-size:18px}
@@ -593,17 +861,97 @@ html,body{
   .bot-type-fixed-icon svg{width:16px;height:16px}
   .bot-type-fixed-name{font-size:12px}
   .bot-type-fixed-desc{font-size:9px}
+  .platform-btn{padding:18px 16px}
+  .platform-btn-icon{width:42px;height:42px}
+  .platform-btn-name{font-size:16px}
+  .detail-hero{padding:22px 18px 18px}
+  .detail-hero-icon{width:56px;height:56px}
+  .detail-hero-name{font-size:20px}
+  .detail-stat-value{font-size:16px}
 }
 </style>
 </head>
 <body>
-<div class="app">
+
+<!-- =========================== Logo Intro Screen =========================== -->
+<div class="logo-screen" id="logoScreen">
+  <div class="logo-container" id="logoContainer">
+    <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="cyanGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" style="stop-color:#00d2ff"/>
+          <stop offset="40%" style="stop-color:#0099cc"/>
+          <stop offset="100%" style="stop-color:#00f0ff"/>
+        </linearGradient>
+        <linearGradient id="blueGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" style="stop-color:#09111f"/>
+          <stop offset="50%" style="stop-color:#000"/>
+          <stop offset="100%" style="stop-color:#070d18"/>
+        </linearGradient>
+        <clipPath id="hexagonClip">
+          <path d="M100 15 L160 50 L160 120 L100 155 L40 120 L40 50 Z"/>
+        </clipPath>
+      </defs>
+      <path d="M100 15 L160 50 L160 120 L100 155 L40 120 L40 50 Z" fill="#000"/>
+      <g clip-path="url(#hexagonClip)">
+        <rect class="bar bar-1" x="60" y="75" width="18" height="85" rx="2"/>
+        <rect class="bar bar-3" x="122" y="72" width="18" height="88" rx="2"/>
+        <path class="bar bar-2" d="M91 42 L91 160 L109 160 L109 42 Z"/>
+      </g>
+      <path class="hexagon-border" d="M100 155 L40 120 L40 50 L57.1 40 M100 155 L160 120 L160 50 L142.9 40"/>
+      <path class="hexagon" d="M100 155 L40 120 L40 50 L57.1 40 M100 155 L160 120 L160 50 L142.9 40"/>
+      <path class="notch-fill" d="M100 14.8 L67 32.25"/>
+      <path class="notch-fill" d="M100 14.8 L133 32.25"/>
+      <path class="notch-fill-inner" d="M100 14.8 L67 32.25"/>
+      <path class="notch-fill-inner" d="M100 14.8 L133 32.25"/>
+    </svg>
+  </div>
+</div>
+
+<!-- =========================== Platform Selector Screen =========================== -->
+<div class="platform-screen" id="platformScreen">
+  <div class="platform-screen-title">QuantVexa</div>
+  <h1 class="platform-screen-heading">Select Trading Platform</h1>
+  <div class="platform-buttons">
+    <button class="platform-btn" onclick="selectPlatform('QUOTEX')">
+      <div class="platform-btn-icon">
+        <svg viewBox="0 0 24 24">
+          <line x1="7" y1="3" x2="7" y2="21"/>
+          <rect x="4" y="7" width="6" height="9" fill="#000" fill-opacity="0.15"/>
+          <line x1="17" y1="2" x2="17" y2="22"/>
+          <rect x="14" y="10" width="6" height="7" fill="#000" fill-opacity="0.15"/>
+        </svg>
+      </div>
+      <div class="platform-btn-info">
+        <div class="platform-btn-name">QUOTEX</div>
+        <div class="platform-btn-desc">Binary options trading</div>
+      </div>
+      <div class="platform-btn-arrow">›</div>
+    </button>
+    <button class="platform-btn" onclick="selectPlatform('BINOLLA')">
+      <div class="platform-btn-icon">
+        <svg viewBox="0 0 24 24">
+          <polyline points="3 17 9 11 13 15 21 7"/>
+          <polyline points="14 7 21 7 21 14"/>
+        </svg>
+      </div>
+      <div class="platform-btn-info">
+        <div class="platform-btn-name">BINOLLA</div>
+        <div class="platform-btn-desc">Smart advanced trading</div>
+      </div>
+      <div class="platform-btn-arrow">›</div>
+    </button>
+  </div>
+</div>
+
+<!-- =========================== Main App =========================== -->
+<div class="app" id="mainApp">
 
   <!-- Top Bar -->
   <div class="top-bar">
     <div class="brand">
       <div class="brand-text">
-        <div class="brand-name">BotPanel</div>
+        <div class="brand-name">QuantVexa</div>
         <div class="brand-sub">Control Center</div>
       </div>
     </div>
@@ -667,7 +1015,7 @@ html,body{
             <span class="card-badge disconnected" id="connectionBadge">Offline</span>
           </div>
 
-          <!-- Telegram Bot Type (Compact) -->
+          <!-- Platform -->
           <div class="field">
             <div class="field-label">
               <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6v6H9z"/></svg>
@@ -675,11 +1023,11 @@ html,body{
             </div>
             <div class="bot-type-fixed">
               <div class="bot-type-fixed-icon">
-                <svg viewBox="0 0 24 24"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+                <svg viewBox="0 0 24 24"><polyline points="3 17 9 11 13 15 21 7"/><polyline points="14 7 21 7 21 14"/></svg>
               </div>
               <div class="bot-type-fixed-info">
-                <div class="bot-type-fixed-name">Telegram Bot</div>
-                <div class="bot-type-fixed-desc">Send trading signals via Telegram</div>
+                <div class="bot-type-fixed-name" id="platformName">QUOTEX</div>
+                <div class="bot-type-fixed-desc">Trading signals platform</div>
               </div>
               <div class="bot-type-fixed-check">
                 <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
@@ -687,70 +1035,75 @@ html,body{
             </div>
           </div>
 
-          <!-- Signal Strategy Selector -->
+          <!-- Strategy List (Clickable, opens detail page) -->
           <div class="field">
             <div class="field-label">
               <svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
               <span>Signal Strategy</span>
             </div>
-            <div class="strategy-grid" id="strategyGrid">
-              <div class="strategy-card selected" data-strategy="strong">
-                <div class="strategy-check">
-                  <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+            <div class="strategy-list">
+              <div class="strategy-list-item" data-strategy="strong" onclick="openStrategyDetail('strong')">
+                <div class="strategy-list-icon">
+                  <svg viewBox="0 0 24 24">
+                    <line x1="6" y1="3" x2="6" y2="21"/>
+                    <rect x="4" y="7" width="4" height="8" fill="currentColor" fill-opacity="0.2"/>
+                    <line x1="13" y1="5" x2="13" y2="19"/>
+                    <rect x="11" y="9" width="4" height="6" fill="currentColor" fill-opacity="0.2"/>
+                    <line x1="19" y1="4" x2="19" y2="20"/>
+                    <rect x="17" y="8" width="4" height="7" fill="currentColor" fill-opacity="0.2"/>
+                  </svg>
                 </div>
-                <div class="strategy-icon">
-                  <svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                <div class="strategy-list-info">
+                  <div class="strategy-list-name">Strong</div>
+                  <div class="strategy-list-desc">High frequency, moderate accuracy</div>
                 </div>
-                <div class="strategy-name">Strong</div>
-                <div class="strategy-desc">High frequency, moderate accuracy</div>
+                <div class="strategy-list-arrow">›</div>
               </div>
-              <div class="strategy-card" data-strategy="medium">
-                <div class="strategy-check">
-                  <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+              <div class="strategy-list-item" data-strategy="medium" onclick="openStrategyDetail('medium')">
+                <div class="strategy-list-icon">
+                  <svg viewBox="0 0 24 24">
+                    <line x1="3" y1="12" x2="21" y2="12"/>
+                    <polyline points="3 6 9 12 13 8 21 14"/>
+                    <circle cx="13" cy="8" r="1.5" fill="currentColor"/>
+                  </svg>
                 </div>
-                <div class="strategy-icon">
-                  <svg viewBox="0 0 24 24"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg>
+                <div class="strategy-list-info">
+                  <div class="strategy-list-name">Medium</div>
+                  <div class="strategy-list-desc">Balanced signals, steady results</div>
                 </div>
-                <div class="strategy-name">Medium</div>
-                <div class="strategy-desc">Balanced signals, steady results</div>
+                <div class="strategy-list-arrow">›</div>
               </div>
-              <div class="strategy-card" data-strategy="pro">
-                <div class="strategy-check">
-                  <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+              <div class="strategy-list-item" data-strategy="pro" onclick="openStrategyDetail('pro')">
+                <div class="strategy-list-icon">
+                  <svg viewBox="0 0 24 24">
+                    <polygon points="12 2 22 12 12 22 2 12"/>
+                    <polyline points="7 12 10 9 14 13 17 10"/>
+                  </svg>
                 </div>
-                <div class="strategy-icon">
-                  <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>
+                <div class="strategy-list-info">
+                  <div class="strategy-list-name">Pro</div>
+                  <div class="strategy-list-desc">Premium accuracy, low frequency</div>
                 </div>
-                <div class="strategy-name">Pro</div>
-                <div class="strategy-desc">Premium accuracy, low frequency</div>
+                <div class="strategy-list-arrow">›</div>
               </div>
             </div>
             <div class="field-hint">
               <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
-              <span id="strategyHint">Strong mode selected — generates frequent signals</span>
+              <span>Tap any strategy to view full details</span>
             </div>
           </div>
 
-          <!-- Token Field -->
-          <div class="field">
-            <div class="field-label">
-              <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-              <span>Bot Token</span>
-            </div>
-            <input type="password" class="field-input" id="tokenInput" placeholder="••••••••••••••••••••••••" autocomplete="off"/>
-            <div class="field-hint">
-              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
-              <span>Stored encrypted locally on your device</span>
-            </div>
-          </div>
-
-          <!-- Chat ID Field -->
+          <!-- Chat ID Field (Bot Token removed) -->
           <div class="field">
             <div class="field-label">
               <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
               <span>Chat ID</span>
             </div>
             <input type="text" class="field-input" id="chatIdInput" placeholder="-1001234567890" autocomplete="off"/>
+            <div class="field-hint">
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+              <span>Bot must be admin in the channel to send signals</span>
+            </div>
           </div>
 
           <!-- Session Time Field -->
@@ -822,6 +1175,17 @@ html,body{
       </div>
     </div>
 
+    <!-- ===== Strategy Detail Page ===== -->
+    <div class="page" id="strategyDetailPage">
+      <div class="page-inner">
+        <button class="detail-back" onclick="navigateTo('home')">
+          <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+          <span>Back</span>
+        </button>
+        <div id="strategyDetailContent"></div>
+      </div>
+    </div>
+
     <!-- ===== History Page ===== -->
     <div class="page" id="historyPage">
       <div class="page-inner">
@@ -864,11 +1228,11 @@ html,body{
 
   <!-- Bottom Bar -->
   <div class="bottom-bar">
-    <button class="nav-btn active" data-page="home">
+    <button class="nav-btn active" data-page="home" onclick="navigateTo('home')">
       <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       <span class="label">Home</span>
     </button>
-    <button class="nav-btn" data-page="history">
+    <button class="nav-btn" data-page="history" onclick="navigateTo('history')">
       <svg viewBox="0 0 24 24"><path d="M1 4v6h6"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/><polyline points="12 7 12 12 16 14"/></svg>
       <span class="badge hidden" id="historyBadge">0</span>
       <span class="label">History</span>
@@ -888,24 +1252,72 @@ html,body{
 const STRATEGIES = {
   strong: {
     name: 'Strong',
+    tag: 'High frequency, moderate accuracy',
+    color: '#00ff88',
     hint: 'Strong mode selected — generates frequent signals',
     winRate: 0.55,
     profitRange: [0.3, 1.8],
-    lossRange: [0.4, 1.6]
+    lossRange: [0.4, 1.6],
+    icon: '<svg viewBox="0 0 24 24"><line x1="6" y1="3" x2="6" y2="21"/><rect x="4" y="7" width="4" height="8" fill="currentColor" fill-opacity="0.2"/><line x1="13" y1="5" x2="13" y2="19"/><rect x="11" y="9" width="4" height="6" fill="currentColor" fill-opacity="0.2"/><line x1="19" y1="4" x2="19" y2="20"/><rect x="17" y="8" width="4" height="7" fill="currentColor" fill-opacity="0.2"/></svg>',
+    stats: [
+      {value: '15-25', label: 'Signals/day'},
+      {value: '70%', label: 'Accuracy'},
+      {value: '1-3m', label: 'Duration'}
+    ],
+    features: [
+      {text: 'Generates up to <strong>25 signals per day</strong> to capture maximum market opportunities'},
+      {text: 'Real-time scanning across <strong>multiple timeframes</strong> simultaneously for faster entries'},
+      {text: 'Instant alerts when a signal is confirmed, with <strong>precise entry point</strong> detection'},
+      {text: 'Supports all major assets: currencies, crypto, commodities, and indices'},
+      {text: '<strong>70% accuracy</strong> rate with preliminary filtering to discard weak signals'},
+      {text: 'Best suited for <strong>active traders</strong> who prefer high-volume trading sessions'}
+    ]
   },
   medium: {
     name: 'Medium',
+    tag: 'Balanced signals, steady results',
+    color: '#00d2ff',
     hint: 'Medium mode selected — balanced signals and results',
     winRate: 0.65,
     profitRange: [0.3, 2.0],
-    lossRange: [0.3, 1.5]
+    lossRange: [0.3, 1.5],
+    icon: '<svg viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"/><polyline points="3 6 9 12 13 8 21 14"/><circle cx="13" cy="8" r="1.5" fill="currentColor"/></svg>',
+    stats: [
+      {value: '8-12', label: 'Signals/day'},
+      {value: '80%', label: 'Accuracy'},
+      {value: '2-5m', label: 'Duration'}
+    ],
+    features: [
+      {text: '<strong>Perfect balance</strong> between signal volume and quality for steady, consistent results'},
+      {text: 'Multi-timeframe analysis to <strong>confirm trend direction</strong> before sending any signal'},
+      {text: 'Advanced filtering system automatically excludes <strong>low-quality setups</strong>'},
+      {text: 'Up to <strong>80% accuracy</strong> with built-in risk management rules'},
+      {text: 'Suitable for all levels — from <strong>beginners to advanced traders</strong>'},
+      {text: 'Signals distributed throughout the day with <strong>smart timing</strong> for optimal sessions'}
+    ]
   },
   pro: {
     name: 'Pro',
+    tag: 'Premium accuracy, low frequency',
+    color: '#ab82ff',
     hint: 'Pro mode selected — premium accuracy, low frequency',
     winRate: 0.78,
     profitRange: [0.5, 2.5],
-    lossRange: [0.3, 1.2]
+    lossRange: [0.3, 1.2],
+    icon: '<svg viewBox="0 0 24 24"><polygon points="12 2 22 12 12 22 2 12"/><polyline points="7 12 10 9 14 13 17 10"/></svg>',
+    stats: [
+      {value: '3-5', label: 'Signals/day'},
+      {value: '92%', label: 'Accuracy'},
+      {value: '5-15m', label: 'Duration'}
+    ],
+    features: [
+      {text: 'Hand-picked signals limited to <strong>5 per day</strong> at the highest quality tier'},
+      {text: 'Exceptional <strong>92% accuracy</strong> rate with multi-source confirmation'},
+      {text: 'Deep analysis powered by <strong>AI algorithms</strong> and machine-learning models'},
+      {text: 'Every signal confirmed across <strong>multiple technical indicators</strong> before delivery'},
+      {text: 'Includes news and economic event impact analysis for smarter entries'},
+      {text: 'Built for <strong>professional traders</strong> who prioritize quality over quantity'}
+    ]
   }
 };
 
@@ -914,6 +1326,7 @@ const State = {
   currentPage: 'home',
   currentFilter: 'all',
   strategy: 'strong',
+  platform: 'QUOTEX',
   isRunning: false,
   sessionTimer: null,
   nextSignalTimer: null,
@@ -923,7 +1336,6 @@ const State = {
   signalsSent: 0,
   credits: 847,
   costPerSignal: 5,
-  token: '',
   chatId: '',
   trades: []
 };
@@ -955,35 +1367,91 @@ function escapeHtml(s){
   return d.innerHTML;
 }
 
-/* ===== Navigation ===== */
-document.querySelectorAll('.nav-btn').forEach(btn=>{
-  btn.addEventListener('click',()=>{
-    navigateTo(btn.dataset.page);
-  });
-});
+/* ===== Logo Intro Sequence ===== */
+(function(){
+  const logoScreen = document.getElementById('logoScreen');
+  const logoContainer = document.getElementById('logoContainer');
+  setTimeout(function(){
+    logoContainer.classList.add('shown');
+    setTimeout(function(){
+      logoContainer.classList.add('expanded');
+      setTimeout(function(){
+        logoScreen.classList.add('hidden');
+        document.getElementById('platformScreen').classList.add('visible');
+      }, 1500);
+    }, 3000);
+  }, 2000);
+})();
 
+/* ===== Platform Selection ===== */
+function selectPlatform(name){
+  State.platform = name;
+  document.getElementById('platformName').textContent = name;
+  const platformScreen = document.getElementById('platformScreen');
+  platformScreen.classList.add('hidden');
+  setTimeout(function(){
+    platformScreen.classList.remove('visible');
+    document.getElementById('mainApp').classList.add('visible');
+  }, 500);
+}
+
+/* ===== Navigation ===== */
 function navigateTo(page){
   State.currentPage = page;
   document.querySelectorAll('.nav-btn').forEach(b=>{
     b.classList.toggle('active',b.dataset.page===page);
   });
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.getElementById(page+'Page').classList.add('active');
+  const target = document.getElementById(page+'Page');
+  if(target) target.classList.add('active');
   if(page==='history') renderTrades();
 }
 
-/* ===== Strategy Selection ===== */
-document.querySelectorAll('.strategy-card').forEach(card=>{
-  card.addEventListener('click',()=>{
-    document.querySelectorAll('.strategy-card').forEach(c=>c.classList.remove('selected'));
-    card.classList.add('selected');
-    State.strategy = card.dataset.strategy;
-    const strat = STRATEGIES[State.strategy];
-    document.getElementById('strategyHint').textContent = strat.hint;
-    saveState();
-    showToast('Strategy: '+strat.name,'success');
-  });
-});
+/* ===== Strategy Detail Page ===== */
+function openStrategyDetail(strategy){
+  const data = STRATEGIES[strategy];
+  const content = document.getElementById('strategyDetailContent');
+  content.innerHTML = `
+    <div class="detail-page" data-strategy="${strategy}">
+      <div class="detail-hero" data-strategy="${strategy}">
+        <div class="detail-hero-icon">${data.icon}</div>
+        <div class="detail-hero-name">${data.name}</div>
+        <div class="detail-hero-tag">${data.tag}</div>
+      </div>
+      <div class="detail-stats">
+        ${data.stats.map(s => `
+          <div class="detail-stat">
+            <div class="detail-stat-value">${s.value}</div>
+            <div class="detail-stat-label">${s.label}</div>
+          </div>
+        `).join('')}
+      </div>
+      <div class="detail-features">
+        <div class="detail-features-title">Features</div>
+        ${data.features.map(f => `
+          <div class="detail-feature">
+            <div class="detail-feature-check">
+              <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <div class="detail-feature-text">${f.text}</div>
+          </div>
+        `).join('')}
+      </div>
+      <button class="detail-activate" onclick="activateStrategy('${strategy}')">
+        <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+        <span>Activate ${data.name} Strategy</span>
+      </button>
+    </div>
+  `;
+  navigateTo('strategyDetail');
+}
+
+function activateStrategy(strategy){
+  State.strategy = strategy;
+  const data = STRATEGIES[strategy];
+  showToast(data.name + ' strategy activated', 'success');
+  setTimeout(() => navigateTo('home'), 800);
+}
 
 /* ===== Filter Chips ===== */
 document.querySelectorAll('.filter-chip').forEach(chip=>{
@@ -995,225 +1463,15 @@ document.querySelectorAll('.filter-chip').forEach(chip=>{
   });
 });
 
-/* ===== Session Control ===== */
-function toggleSession(){
-  if(State.isRunning) stopSession();
-  else startSession();
-}
-
-function startSession(){
-  const token = document.getElementById('tokenInput').value.trim();
-  const chatId = document.getElementById('chatIdInput').value.trim();
-  const sessionTime = document.getElementById('sessionTimeInput').value;
-  const signalsCount = parseInt(document.getElementById('signalsCountInput').value)||10;
-
-  if(!token){
-    showToast('Please enter bot token','error');
-    return;
-  }
-  if(!chatId){
-    showToast('Please enter Chat ID','error');
-    return;
-  }
-  if(!sessionTime){
-    showToast('Please set session time','error');
-    return;
-  }
-  if(State.credits < State.costPerSignal * signalsCount){
-    showToast('Insufficient credits for '+signalsCount+' signals','error');
-    return;
-  }
-
-  State.token = token;
-  State.chatId = chatId;
-  State.sessionTime = sessionTime;
-  State.signalsCount = signalsCount;
-  State.signalsSent = 0;
-  State.isRunning = true;
-  State.sessionStartTime = new Date();
-
-  const runBtn = document.getElementById('runBtn');
-  runBtn.classList.add('running');
-  document.getElementById('runBtnText').textContent = 'Stop Session';
-  
-  const status = document.getElementById('topStatus');
-  status.classList.remove('offline');
-  status.classList.add('online');
-  const stratName = STRATEGIES[State.strategy].name;
-  document.getElementById('topStatusText').textContent = 'Online — '+stratName;
-  
-  const badge = document.getElementById('connectionBadge');
-  badge.classList.remove('disconnected');
-  badge.classList.add('connected');
-  badge.textContent = 'Online';
-
-  document.getElementById('sessionCard').style.display = '';
-  document.getElementById('sessionStrategy').textContent = stratName;
-  document.getElementById('sessionTime').textContent = sessionTime;
-  document.getElementById('sessionStart').textContent = State.sessionStartTime.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
-  document.getElementById('sessionSignals').textContent = '0 / '+signalsCount;
-  document.getElementById('sessionStatus').textContent = 'Scheduled';
-  document.getElementById('sessionStatus').className = 'val';
-
-  showToast('Session scheduled for '+sessionTime+' ('+stratName+')','success');
-  saveState();
-
-  scheduleSessionStart();
-}
-
-function scheduleSessionStart(){
-  if(State.sessionTimer) clearTimeout(State.sessionTimer);
-  
-  const now = new Date();
-  const [h,m] = State.sessionTime.split(':').map(Number);
-  const target = new Date();
-  target.setHours(h,m,0,0);
-  if(target.getTime() <= now.getTime()){
-    target.setDate(target.getDate()+1);
-  }
-  
-  const msUntilStart = target.getTime() - now.getTime();
-  
-  State.sessionTimer = setTimeout(()=>{
-    if(!State.isRunning) return;
-    document.getElementById('sessionStatus').textContent = 'Running';
-    document.getElementById('sessionStatus').className = 'val positive';
-    showToast('Session started — sending signals','success');
-    startSendingSignals();
-  }, msUntilStart);
-}
-
-function startSendingSignals(){
-  if(State.nextSignalTimer) clearInterval(State.nextSignalTimer);
-  
-  // Interval depends on strategy
-  // Strong: faster signals, Medium: balanced, Pro: slower signals
-  const totalIntervalMs = 8 * 60 * 60 * 1000;
-  let multiplier = 1;
-  if(State.strategy==='strong') multiplier = 0.7;
-  else if(State.strategy==='medium') multiplier = 1;
-  else if(State.strategy==='pro') multiplier = 1.5;
-  
-  const intervalMs = Math.max(30000, (totalIntervalMs / State.signalsCount) * multiplier);
-  
-  sendOneSignal();
-  
-  State.nextSignalTimer = setInterval(()=>{
-    if(!State.isRunning) return;
-    if(State.signalsSent >= State.signalsCount){
-      clearInterval(State.nextSignalTimer);
-      State.nextSignalTimer = null;
-      document.getElementById('sessionStatus').textContent = 'Completed';
-      document.getElementById('sessionStatus').className = 'val';
-      showToast('All '+State.signalsCount+' signals sent','success');
-      return;
-    }
-    sendOneSignal();
-  }, intervalMs);
-}
-
-function sendOneSignal(){
-  if(State.credits < State.costPerSignal){
-    showToast('Credits exhausted','error');
-    stopSession();
-    return;
-  }
-  
-  const syms = ['BTC/USDT','ETH/USDT','SOL/USDT','XRP/USDT','AVAX/USDT','DOGE/USDT','LINK/USDT','ADA/USDT'];
-  const sym = syms[Math.floor(Math.random()*syms.length)];
-  const type = Math.random()<0.5?'buy':'sell';
-  const newTrade = {
-    id: Date.now()+Math.random(),
-    symbol: sym,
-    short: sym.split('/')[0],
-    type: type,
-    entry: Math.random()*1000+100,
-    exit: 0,
-    duration: Math.floor(Math.random()*180)+60,
-    time: new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'}),
-    result: 'pending',
-    profit: 0,
-    strategy: State.strategy
-  };
-  State.trades.unshift(newTrade);
-  State.signalsSent++;
-  State.credits -= State.costPerSignal;
-  updateCredits();
-  
-  document.getElementById('sessionSignals').textContent = State.signalsSent+' / '+State.signalsCount;
-  
-  const pending = State.trades.filter(t=>t.result==='pending').length;
-  const badge = document.getElementById('historyBadge');
-  if(pending>0){badge.textContent=pending;badge.classList.remove('hidden');}
-  
-  // Resolve based on strategy win rate
-  setTimeout(()=>{
-    const strat = STRATEGIES[State.strategy];
-    const r = Math.random();
-    if(r < strat.winRate){
-      newTrade.result='win';
-      const [minP,maxP] = strat.profitRange;
-      newTrade.profit = Math.random()*(maxP-minP)+minP;
-      newTrade.exit = newTrade.entry*(1+newTrade.profit/100*(type==='buy'?1:-1));
-    } else {
-      newTrade.result='loss';
-      const [minL,maxL] = strat.lossRange;
-      newTrade.profit = -(Math.random()*(maxL-minL)+minL);
-      newTrade.exit = newTrade.entry*(1+newTrade.profit/100*(type==='buy'?1:-1));
-    }
-    if(State.currentPage==='history') renderTrades();
-    const pending2 = State.trades.filter(t=>t.result==='pending').length;
-    const badge2 = document.getElementById('historyBadge');
-    if(pending2>0){badge2.textContent=pending2;badge2.classList.remove('hidden');}
-    else badge2.classList.add('hidden');
-  }, 15000+Math.random()*20000);
-
-  if(State.currentPage==='history') renderTrades();
-}
-
-function stopSession(){
-  State.isRunning = false;
-  if(State.sessionTimer){clearTimeout(State.sessionTimer);State.sessionTimer=null;}
-  if(State.nextSignalTimer){clearInterval(State.nextSignalTimer);State.nextSignalTimer=null;}
-
-  const runBtn = document.getElementById('runBtn');
-  runBtn.classList.remove('running');
-  document.getElementById('runBtnText').textContent = 'Start Session';
-  
-  const status = document.getElementById('topStatus');
-  status.classList.remove('online');
-  status.classList.add('offline');
-  document.getElementById('topStatusText').textContent = 'Offline';
-  
-  const badge = document.getElementById('connectionBadge');
-  badge.classList.remove('connected');
-  badge.classList.add('disconnected');
-  badge.textContent = 'Offline';
-
-  document.getElementById('sessionCard').style.display = 'none';
-
-  showToast('Session stopped','success');
-  saveState();
-}
-
-/* ===== Credits ===== */
-function updateCredits(){
-  document.getElementById('creditsValue').textContent = State.credits;
-  const remaining = Math.floor(State.credits / State.costPerSignal);
-  document.getElementById('remainingSignals').textContent = remaining;
-  const maxCredits = 1000;
-  const pct = Math.min(1, State.credits/maxCredits);
-  const circ = 2*Math.PI*42;
-  document.getElementById('creditsCircle').setAttribute('stroke-dashoffset', circ*(1-pct));
-}
-
-/* ===== Trades Rendering ===== */
+/* ===== Render Trades ===== */
 function renderTrades(){
   const list = document.getElementById('tradesList');
-  const filtered = State.currentFilter==='all' 
-    ? State.trades 
-    : State.trades.filter(t=>t.result===State.currentFilter);
-  
+  if(!list) return;
+  const filtered = State.trades.filter(t=>{
+    if(State.currentFilter==='all') return true;
+    return t.result===State.currentFilter;
+  });
+  // Update stats
   const total = State.trades.length;
   const wins = State.trades.filter(t=>t.result==='win').length;
   const losses = State.trades.filter(t=>t.result==='loss').length;
@@ -1221,40 +1479,24 @@ function renderTrades(){
   document.getElementById('statWins').textContent = wins;
   document.getElementById('statLosses').textContent = losses;
 
-  if(!filtered.length){
+  if(filtered.length===0){
     list.innerHTML = `<div class="empty-state">
-      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-      <div>No trades in this category</div>
+      <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <div>No trades found</div>
     </div>`;
     return;
   }
-
-  list.innerHTML = '';
-  filtered.forEach((t,i)=>{
-    const card = document.createElement('div');
-    card.className = 'trade-card '+t.result;
-    card.style.animationDelay = (i*0.04)+'s';
-    
-    const resultIcon = t.result==='win'
-      ? '<svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>'
-      : t.result==='loss'
-      ? '<svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>'
-      : '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>';
-    
-    const resultText = t.result==='win'?'Win':t.result==='loss'?'Loss':'Pending';
-    const profitClass = t.result==='win'?'positive':t.result==='loss'?'negative':'neutral';
-    const profitText = t.result==='pending'?'—':(t.profit>=0?'+':'')+t.profit.toFixed(2)+'%';
-    
-    card.innerHTML = `
+  list.innerHTML = filtered.map(t=>`
+    <div class="trade-card ${t.result}">
       <div class="trade-top">
         <div class="trade-symbol">
           <div class="trade-symbol-icon">${escapeHtml(t.short)}</div>
           <div class="trade-symbol-info">
             <div class="trade-symbol-name">${escapeHtml(t.symbol)}</div>
-            <div class="trade-symbol-meta">${escapeHtml(t.time)} • ${t.duration}m${t.strategy?' • '+STRATEGIES[t.strategy].name:''}</div>
+            <div class="trade-symbol-meta">${t.duration}s · ${t.time}</div>
           </div>
         </div>
-        <div class="trade-type ${t.type}">${t.type==='buy'?'▲ BUY':'▼ SELL'}</div>
+        <div class="trade-type ${t.type}">${t.type}</div>
       </div>
       <div class="trade-details">
         <div class="trade-detail">
@@ -1267,107 +1509,52 @@ function renderTrades(){
         </div>
         <div class="trade-detail">
           <div class="trade-detail-label">Duration</div>
-          <div class="trade-detail-value">${t.duration}m</div>
+          <div class="trade-detail-value">${t.duration}s</div>
         </div>
       </div>
       <div class="trade-bottom">
         <div class="trade-result ${t.result}">
-          ${resultIcon}
-          <span>${resultText}</span>
+          ${t.result==='win'?'<svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>':t.result==='loss'?'<svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>':'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>'}
+          ${t.result}
         </div>
-        <div class="trade-profit ${profitClass}">${profitText}</div>
+        <div class="trade-profit ${t.profit>0?'positive':t.profit<0?'negative':'neutral'}">
+          ${t.profit>0?'+':''}${t.profit.toFixed(2)}%
+        </div>
       </div>
-    `;
-    list.appendChild(card);
-  });
+    </div>
+  `).join('');
+}
+
+/* ===== Session Control ===== */
+function toggleSession(){
+  State.isRunning = !State.isRunning;
+  const btn = document.getElementById('runBtn');
+  const text = document.getElementById('runBtnText');
+  if(State.isRunning){
+    btn.classList.add('running');
+    text.textContent = 'Stop Session';
+    showToast('Session started', 'success');
+    document.getElementById('sessionCard').style.display = 'block';
+  } else {
+    btn.classList.remove('running');
+    text.textContent = 'Start Session';
+    showToast('Session stopped', 'error');
+  }
 }
 
 /* ===== Toast ===== */
-let toastTimer = null;
-function showToast(msg, type){
+let toastTimer;
+function showToast(text, type){
   const toast = document.getElementById('toast');
-  const text = document.getElementById('toastText');
-  text.textContent = msg;
+  const toastText = document.getElementById('toastText');
+  toastText.textContent = text;
   toast.classList.remove('error');
-  if(type==='error') toast.classList.add('error');
+  if(type === 'error') toast.classList.add('error');
   toast.classList.add('visible');
-  if(toastTimer) clearTimeout(toastTimer);
-  toastTimer = setTimeout(()=>{
-    toast.classList.remove('visible');
-  }, 2500);
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toast.classList.remove('visible'), 2500);
 }
-
-/* ===== Persistence ===== */
-function saveState(){
-  try{
-    localStorage.setItem('botpanel.state', JSON.stringify({
-      strategy: State.strategy,
-      token: State.token,
-      chatId: State.chatId,
-      sessionTime: State.sessionTime,
-      signalsCount: State.signalsCount,
-      credits: State.credits,
-      trades: State.trades
-    }));
-  }catch(e){}
-}
-function loadState(){
-  try{
-    const raw = localStorage.getItem('botpanel.state');
-    if(!raw) return;
-    const d = JSON.parse(raw);
-    if(d.strategy && STRATEGIES[d.strategy]){
-      State.strategy = d.strategy;
-      document.querySelectorAll('.strategy-card').forEach(c=>{
-        c.classList.toggle('selected', c.dataset.strategy===d.strategy);
-      });
-      document.getElementById('strategyHint').textContent = STRATEGIES[d.strategy].hint;
-    }
-    if(d.token){
-      State.token = d.token;
-      document.getElementById('tokenInput').value = d.token;
-    }
-    if(d.chatId){
-      State.chatId = d.chatId;
-      document.getElementById('chatIdInput').value = d.chatId;
-    }
-    if(d.sessionTime){
-      State.sessionTime = d.sessionTime;
-      document.getElementById('sessionTimeInput').value = d.sessionTime;
-    }
-    if(d.signalsCount){
-      State.signalsCount = d.signalsCount;
-      document.getElementById('signalsCountInput').value = d.signalsCount;
-    }
-    if(typeof d.credits==='number') State.credits = d.credits;
-    if(Array.isArray(d.trades) && d.trades.length) State.trades = d.trades;
-  }catch(e){}
-}
-
-/* ===== Init ===== */
-loadState();
-updateCredits();
-renderTrades();
-
-document.getElementById('tokenInput').addEventListener('input', e=>{
-  State.token = e.target.value;
-  saveState();
-});
-document.getElementById('chatIdInput').addEventListener('input', e=>{
-  State.chatId = e.target.value;
-  saveState();
-});
-document.getElementById('sessionTimeInput').addEventListener('input', e=>{
-  State.sessionTime = e.target.value;
-  saveState();
-});
-document.getElementById('signalsCountInput').addEventListener('input', e=>{
-  State.signalsCount = parseInt(e.target.value)||10;
-  saveState();
-});
-
-setInterval(saveState, 5000);
-window.addEventListener('beforeunload', saveState);
 </script>
+
 </body>
 </html>
