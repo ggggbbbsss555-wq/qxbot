@@ -440,6 +440,24 @@ html,body{
   border:1px solid rgba(0,136,204,0.25);
   border-radius:8px;
   display:flex;align-items:center;gap:10px;
+  cursor:pointer;
+  transition:border-color 0.2s ease,background 0.2s ease;
+}
+.bot-type-fixed:hover{
+  border-color:#00d2ff;
+  background:linear-gradient(180deg,rgba(0,210,255,0.12) 0%,rgba(0,210,255,0.03) 100%);
+}
+.bot-type-fixed-change{
+  font-size:9px;font-weight:700;color:#00d2ff;
+  letter-spacing:0.5px;text-transform:uppercase;
+  padding:3px 8px;border-radius:8px;
+  background:rgba(0,210,255,0.1);
+  border:1px solid rgba(0,210,255,0.3);
+  flex-shrink:0;
+  transition:all 0.2s ease;
+}
+.bot-type-fixed:hover .bot-type-fixed-change{
+  background:rgba(0,210,255,0.2);
 }
 .bot-type-fixed-icon{
   width:32px;height:32px;
@@ -1369,6 +1387,92 @@ html,body{
 .detail-activate:hover{background:linear-gradient(180deg,#00deff 0%,#00a8e0 100%)}
 .detail-activate svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
 
+/* ===== Platform Selector Modal ===== */
+.platform-modal{
+  position:fixed;inset:0;z-index:1500;
+  background:rgba(0,0,0,0.85);
+  display:none;align-items:center;justify-content:center;
+  padding:20px;
+  opacity:0;transition:opacity 0.3s ease;
+  backdrop-filter:blur(4px);
+}
+.platform-modal.visible{display:flex;opacity:1}
+.platform-modal-box{
+  background:linear-gradient(180deg,#131313 0%,#080808 100%);
+  border:1px solid #1f1f1f;
+  border-radius:14px;
+  padding:24px 20px 20px;
+  max-width:340px;width:100%;
+}
+.platform-modal-title{
+  font-size:14px;font-weight:700;color:#fff;
+  letter-spacing:0.5px;
+  margin-bottom:6px;text-align:center;
+}
+.platform-modal-desc{
+  font-size:11px;color:#888;font-weight:500;
+  text-align:center;margin-bottom:18px;
+  letter-spacing:0.3px;
+}
+.platform-modal-options{
+  display:flex;flex-direction:column;gap:10px;
+}
+.platform-modal-option{
+  padding:16px 14px;
+  background:linear-gradient(180deg,#161616 0%,#0a0a0a 100%);
+  border:1px solid #222;
+  border-radius:10px;
+  cursor:pointer;
+  display:flex;align-items:center;gap:12px;
+  transition:all 0.22s ease;
+  font-family:inherit;color:inherit;text-align:left;
+}
+.platform-modal-option:hover{
+  border-color:#00d2ff;
+  background:linear-gradient(180deg,rgba(0,210,255,0.08) 0%,#0a0a0a 100%);
+}
+.platform-modal-option.selected{
+  border-color:#00d2ff;
+  background:linear-gradient(180deg,rgba(0,210,255,0.12) 0%,rgba(0,210,255,0.03) 100%);
+}
+.platform-modal-option-icon{
+  width:40px;height:40px;flex-shrink:0;
+  border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(135deg,#00d2ff 0%,#0099cc 100%);
+  border:1px solid #00d2ff;
+}
+.platform-modal-option-icon svg{width:22px;height:22px;stroke:#000;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.platform-modal-option-info{flex:1;min-width:0}
+.platform-modal-option-name{
+  font-size:15px;font-weight:800;color:#fff;
+  letter-spacing:0.5px;margin-bottom:2px;
+}
+.platform-modal-option-desc{
+  font-size:10px;color:#888;font-weight:500;
+}
+.platform-modal-option-check{
+  width:20px;height:20px;flex-shrink:0;
+  border-radius:50%;
+  background:#00d2ff;
+  display:none;align-items:center;justify-content:center;
+}
+.platform-modal-option.selected .platform-modal-option-check{display:flex}
+.platform-modal-option-check svg{width:12px;height:12px;stroke:#000;fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+.platform-modal-close{
+  width:100%;margin-top:14px;
+  padding:10px;
+  background:transparent;
+  border:1px solid #1f1f1f;
+  border-radius:9px;
+  color:#888;
+  font-family:inherit;font-size:12px;font-weight:700;
+  letter-spacing:0.5px;text-transform:uppercase;
+  cursor:pointer;
+  transition:all 0.2s ease;
+}
+.platform-modal-close:hover{border-color:#333;color:#fff}
+
 /* ===== Toast ===== */
 .toast{
   position:fixed;top:70px;left:50%;
@@ -1598,17 +1702,15 @@ html,body{
               <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6v6H9z"/></svg>
               <span>Platform</span>
             </div>
-            <div class="bot-type-fixed">
+            <div class="bot-type-fixed" onclick="openPlatformModal()">
               <div class="bot-type-fixed-icon">
                 <svg viewBox="0 0 24 24"><polyline points="3 17 9 11 13 15 21 7"/><polyline points="14 7 21 7 21 14"/></svg>
               </div>
               <div class="bot-type-fixed-info">
                 <div class="bot-type-fixed-name" id="platformName">QUOTEX</div>
-                <div class="bot-type-fixed-desc">Trading signals platform</div>
+                <div class="bot-type-fixed-desc">Tap to change platform</div>
               </div>
-              <div class="bot-type-fixed-check">
-                <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
-              </div>
+              <div class="bot-type-fixed-change">Change</div>
             </div>
           </div>
 
@@ -1917,6 +2019,41 @@ html,body{
 <div class="toast" id="toast">
   <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
   <span id="toastText">Saved</span>
+</div>
+
+<!-- Platform Selector Modal -->
+<div class="platform-modal" id="platformModal">
+  <div class="platform-modal-box">
+    <div class="platform-modal-title">Select Platform</div>
+    <div class="platform-modal-desc">Choose your trading platform</div>
+    <div class="platform-modal-options">
+      <button class="platform-modal-option" data-platform="QUOTEX" onclick="changePlatform('QUOTEX')">
+        <div class="platform-modal-option-icon">
+          <svg viewBox="0 0 24 24"><line x1="7" y1="3" x2="7" y2="21"/><rect x="4" y="7" width="6" height="9" fill="#000" fill-opacity="0.15"/><line x1="17" y1="2" x2="17" y2="22"/><rect x="14" y="10" width="6" height="7" fill="#000" fill-opacity="0.15"/></svg>
+        </div>
+        <div class="platform-modal-option-info">
+          <div class="platform-modal-option-name">QUOTEX</div>
+          <div class="platform-modal-option-desc">Binary options trading</div>
+        </div>
+        <div class="platform-modal-option-check">
+          <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+      </button>
+      <button class="platform-modal-option" data-platform="BINOLLA" onclick="changePlatform('BINOLLA')">
+        <div class="platform-modal-option-icon">
+          <svg viewBox="0 0 24 24"><polyline points="3 17 9 11 13 15 21 7"/><polyline points="14 7 21 7 21 14"/></svg>
+        </div>
+        <div class="platform-modal-option-info">
+          <div class="platform-modal-option-name">BINOLLA</div>
+          <div class="platform-modal-option-desc">Smart advanced trading</div>
+        </div>
+        <div class="platform-modal-option-check">
+          <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+      </button>
+    </div>
+    <button class="platform-modal-close" onclick="closePlatformModal()">Cancel</button>
+  </div>
 </div>
 
 <script>
@@ -2552,6 +2689,36 @@ function updateProfileFromTelegram(){
 
 // Run on load
 initTelegramUser();
+
+/* ===== Platform Selector Modal ===== */
+function openPlatformModal(){
+  var modal = document.getElementById('platformModal');
+  // Mark current platform as selected
+  var current = State.platform || 'QUOTEX';
+  document.querySelectorAll('.platform-modal-option').forEach(function(opt){
+    opt.classList.toggle('selected', opt.getAttribute('data-platform') === current);
+  });
+  modal.classList.add('visible');
+}
+
+function closePlatformModal(){
+  document.getElementById('platformModal').classList.remove('visible');
+}
+
+function changePlatform(name){
+  State.platform = name;
+  var nameEl = document.getElementById('platformName');
+  if(nameEl) nameEl.textContent = name;
+  var badgeEl = document.getElementById('activePlatform');
+  if(badgeEl) badgeEl.textContent = name;
+  closePlatformModal();
+  showToast('Platform changed to ' + name, 'success');
+}
+
+// Close modal when clicking outside
+document.getElementById('platformModal').addEventListener('click', function(e){
+  if(e.target === this) closePlatformModal();
+});
 </script>
 
 </body>
